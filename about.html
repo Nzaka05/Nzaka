@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <style>
         :root {
             --primary: #8b5cf6;
@@ -809,6 +810,9 @@
                 formStatus.classList.add('hidden');
             }, 5000);
         }
+        document.querySelector('.md\\:hidden').addEventListener('click', function() {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+});
     });
   </script>
 </body>
