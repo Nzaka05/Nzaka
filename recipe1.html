@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victor's Roasted Beef Recipe</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #FF5757;
+            --secondary-color: #3A3A3A;
+            --accent-color: #FFD15C;
+            --text-color: #2D2D2D;
+            --light-bg: #F9F9F9;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            background-color: #FDFBF7;
+            overflow-x: hidden;
+        }
+        
+        .recipe-header {
+            background: linear-gradient(135deg, var(--primary-color), #FF8C42);
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        
+        .header-content {
+            z-index: 2;
+        }
+        
+        .ingredient-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .ingredient-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .step-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .step-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .highlight-text {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .highlight-text::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 8px;
+            bottom: 1px;
+            left: 0;
+            background-color: var(--accent-color);
+            z-index: -1;
+            opacity: 0.8;
+        }
+        
+        .btn-custom {
+            background: linear-gradient(to right, var(--primary-color), #FF8C42);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-custom::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0.1), rgba(255,255,255,0.4));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-custom:hover::after {
+            transform: scaleX(1);
+        }
+        
+        .rotating-circle {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            border: 15px solid rgba(255, 215, 92, 0.2);
+            top: -150px;
+            right: -150px;
+            z-index: 1;
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .check-icon {
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .ingredient-item:hover .check-icon {
+            transform: scale(1.2);
+        }
+        
+        .num-badge {
+            background: linear-gradient(135deg, var(--primary-color), #FF8C42);
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(255, 87, 87, 0.3);
+        }
+        
+        .custom-blur {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .img-shadow {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .timeline {
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 17px;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary-color), #FF8C42);
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid var(--primary-color);
+        }
+        
+        .text-gradient {
+            color: var(--primary-color); /* Fallback color */
+            background: linear-gradient(135deg, var(--primary-color), #FF8C42);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nutrition-bar {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .nutrition-progress {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary-color), #FF8C42);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 backdrop-filter backdrop-blur-lg bg-opacity-10 bg-gray-900 shadow-lg py-4">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <div class="text-2xl font-bold">
+                <span class="gradient-text">Gideon</span> <span class="text-white">Nzaka</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="menu.html" class="nav-link">Menu</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+            <button class="md:hidden text-white text-xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="recipe-header pt-28 pb-20 px-6 relative overflow-hidden">
+        <div class="rotating-circle"></div>
+        <div class="container mx-auto header-content relative">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="text-white">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-3 reveal">Perfect Roasted Beef</h1>
+                    <p class="text-lg md:text-xl opacity-90 mb-6 reveal">A mouthwatering, tender and juicy roast that's perfect for any special occasion</p>
+                    <div class="flex flex-wrap gap-4 mb-8 reveal">
+                        <div class="flex items-center bg-white bg-opacity-20 rounded-full px-4 py-2">
+                            <i class="fas fa-clock mr-2"></i>
+                            <span>Prep: 20 mins</span>
+                        </div>
+                        <div class="flex items-center bg-white bg-opacity-20 rounded-full px-4 py-2">
+                            <i class="fas fa-fire mr-2"></i>
+                            <span>Cook: 1 hr 30 mins</span>
+                        </div>
+                        <div class="flex items-center bg-white bg-opacity-20 rounded-full px-4 py-2">
+                            <i class="fas fa-users mr-2"></i>
+                            <span>Serves: 6-8</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 reveal">
+                        <button class="btn-custom text-white font-medium py-3 px-6 rounded-full flex items-center">
+                            <i class="fas fa-print mr-2"></i> Print Recipe
+                        </button>
+                        <button class="bg-white text-red-500 font-medium py-3 px-6 rounded-full flex items-center shadow-lg hover:shadow-xl transition-all">
+                            <i class="fas fa-heart mr-2"></i> Save
+                        </button>
+                    </div>
+                </div>
+                <div class="relative reveal">
+                    <div class="bg-white p-3 rounded-3xl shadow-2xl img-shadow">
+                        <img src="./beef1.jpg" 
+                             alt="Perfect Roasted Beef" 
+                             class="rounded-2xl w-full h-auto object-cover" />
+                    </div>
+                    <div class="absolute -bottom-5 -right-5 bg-white p-4 rounded-2xl shadow-lg">
+                        <div class="flex items-center space-x-2">
+                            <img src="./potrait.jpg" alt="Gideon Nzaka" class="w-10 h-10 rounded-full">
+                            <div>
+                                <p class="font-semibold text-sm">Gideon Nzaka</p>
+                                <p class="text-xs text-gray-500">A Microbiology Student</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-16">
+        <!-- Introduction -->
+        <section class="mb-16 reveal">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-4">A <span class="highlight-text">Perfect</span> Roast for Any Occasion</h2>
+                <p class="text-lg text-gray-700 mb-6">This roasted beef recipe combines simple ingredients with precise cooking techniques to create a juicy, tender, and flavorful centerpiece for your dinner table. The outside forms a beautiful crust while the inside remains perfectly pink and juicy.</p>
+                <div class="flex justify-center space-x-6 mt-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-leaf text-red-500 text-xl"></i>
+                        </div>
+                        <p class="font-medium">Low Carb</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-drumstick-bite text-red-500 text-xl"></i>
+                        </div>
+                        <p class="font-medium">High Protein</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-star text-red-500 text-xl"></i>
+                        </div>
+                        <p class="font-medium">Premium</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ingredients Section -->
+        <section class="mb-16">
+            <div class="bg-white rounded-3xl shadow-xl p-8 reveal">
+                <h2 class="text-3xl font-bold mb-8 text-center">Ingredients <span class="text-red-500">You'll Need</span></h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <span class="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center mr-2">
+                                <i class="fas fa-utensils"></i>
+                            </span>
+                            For the Roast
+                        </h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>3-4 pound (1.5-2kg) beef tenderloin or ribeye roast</span>
+                            </li>
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>2 tablespoons olive oil</span>
+                            </li>
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>3 cloves garlic, minced</span>
+                            </li>
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>2 tablespoons fresh rosemary, chopped</span>
+                            </li>
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>2 tablespoons fresh thyme, chopped</span>
+                            </li>
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>1 tablespoon coarse sea salt</span>
+                            </li>
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>2 teaspoons freshly ground black pepper</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <span class="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center mr-2">
+                                <i class="fas fa-glass-whiskey"></i>
+                            </span>
+                            For the Sauce (Optional)
+                        </h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>1 cup beef broth</span>
+                            </li>
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>1/2 cup red wine</span>
+                            </li>
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>2 tablespoons butter</span>
+                            </li>
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>1 tablespoon all-purpose flour</span>
+                            </li>
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>1 teaspoon Dijon mustard</span>
+                            </li>
+                            <li class="flex items-center ingredient-item">
+                                <span class="check-icon mr-3"><i class="far fa-square"></i></span>
+                                <span>Salt and pepper to taste</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-10 p-4 bg-red-50 rounded-xl">
+                    <div class="flex items-start">
+                        <div class="text-red-500 mr-3 text-xl">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg">Chef's Tip</h4>
+                            <p class="text-gray-700">For the best results, let your beef come to room temperature for about 1 hour before cooking. This ensures more even cooking throughout the roast.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructions Section -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center reveal">Step-by-Step <span class="text-red-500">Instructions</span></h2>
+            
+            <div class="timeline relative pl-12 reveal">
+                <!-- Step 1 -->
+                <div class="mb-10 relative">
+                    <div class="timeline-dot"></div>
+                    <div class="num-badge absolute left-0 transform -translate-x-1/2">1</div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 step-card ml-4">
+                        <h3 class="text-xl font-semibold mb-3">Prepare the Beef</h3>
+                        <p class="text-gray-700 mb-4">Preheat your oven to 425°F (220°C). Pat the beef dry with paper towels. This is important for achieving a good sear.</p>
+                        <img src="https://images.unsplash.com/photo-1613454300723-16a9377c92b2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="Preparing beef" 
+                             class="w-full h-auto rounded-xl my-4">
+                        <p class="bg-yellow-50 p-3 rounded-lg text-sm italic">For a tender roast, look for good marbling (fat distributed throughout the meat) when selecting your beef cut.</p>
+                    </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="mb-10 relative">
+                    <div class="timeline-dot"></div>
+                    <div class="num-badge absolute left-0 transform -translate-x-1/2">2</div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 step-card ml-4">
+                        <h3 class="text-xl font-semibold mb-3">Season the Roast</h3>
+                        <p class="text-gray-700 mb-4">In a small bowl, mix together the olive oil, minced garlic, chopped rosemary, thyme, salt, and pepper. Rub this mixture all over the beef, making sure to coat it evenly on all sides.</p>
+                        <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                            <p class="font-medium text-sm text-gray-800">For maximum flavor, you can season the beef up to 24 hours in advance and refrigerate it. Just remember to bring it to room temperature before roasting.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="mb-10 relative">
+                    <div class="timeline-dot"></div>
+                    <div class="num-badge absolute left-0 transform -translate-x-1/2">3</div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 step-card ml-4">
+                        <h3 class="text-xl font-semibold mb-3">Sear the Beef</h3>
+                        <p class="text-gray-700 mb-4">Heat a large oven-safe skillet over high heat. Once hot, add the beef and sear it on all sides until it develops a deep brown crust, about 2-3 minutes per side.</p>
+                        <img src="https://images.unsplash.com/photo-1558030006-450675393462?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1631&q=80" 
+                             alt="Searing beef" 
+                             class="w-full h-auto rounded-xl my-4">
+                        <p class="text-red-500 text-sm font-medium"><i class="fas fa-exclamation-circle mr-1"></i> Don't skip the searing step! This creates a flavorful crust and helps seal in the juices.</p>
+                    </div>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="mb-10 relative">
+                    <div class="timeline-dot"></div>
+                    <div class="num-badge absolute left-0 transform -translate-x-1/2">4</div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 step-card ml-4">
+                        <h3 class="text-xl font-semibold mb-3">Roast to Perfection</h3>
+                        <p class="text-gray-700 mb-4">Transfer the skillet with the beef to the preheated oven. Roast until the internal temperature reaches your desired doneness:</p>
+                        <ul class="space-y-2 mb-4 pl-5 list-disc">
+                            <li>Rare: 120-125°F (about 15 minutes per pound)</li>
+                            <li>Medium-Rare: 130-135°F (about 20 minutes per pound)</li>
+                            <li>Medium: 140-145°F (about 25 minutes per pound)</li>
+                            <li>Medium-Well: 150-155°F (about 30 minutes per pound)</li>
+                        </ul>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-sm text-blue-800"><i class="fas fa-info-circle mr-1"></i> A meat thermometer is essential for achieving perfect doneness. Insert it into the thickest part of the roast for an accurate reading.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 5 -->
+                <div class="mb-10 relative">
+                    <div class="timeline-dot"></div>
+                    <div class="num-badge absolute left-0 transform -translate-x-1/2">5</div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 step-card ml-4">
+                        <h3 class="text-xl font-semibold mb-3">Rest the Meat</h3>
+                        <p class="text-gray-700 mb-4">Once the beef reaches your desired temperature, remove it from the oven. Transfer to a cutting board, loosely tent with foil, and let it rest for 15-20 minutes. This allows the juices to redistribute throughout the meat.</p>
+                        <img src="https://images.unsplash.com/photo-1588168333986-5078d3ae3976?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" 
+                             alt="Resting beef" 
+                             class="w-full h-auto rounded-xl my-4">
+                        <p class="font-medium text-amber-800"><i class="fas fa-clock mr-1"></i> Do not skip the resting period! It's critical for a juicy roast.</p>
+                    </div>
+                </div>
+                
+                <!-- Step 6 -->
+                <div class="mb-10 relative">
+                    <div class="timeline-dot"></div>
+                    <div class="num-badge absolute left-0 transform -translate-x-1/2">6</div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 step-card ml-4">
+                        <h3 class="text-xl font-semibold mb-3">Make the Sauce (Optional)</h3>
+                        <p class="text-gray-700 mb-4">While the beef is resting, prepare the sauce. Using the same skillet with the beef drippings:</p>
+                        <ol class="space-y-2 mb-4 pl-5 list-decimal">
+                            <li>Place the skillet over medium heat and add the red wine to deglaze, scraping up the browned bits.</li>
+                            <li>Add the beef broth and simmer for 5 minutes to reduce slightly.</li>
+                            <li>In a small bowl, mix the butter and flour to form a paste.</li>
+                            <li>Whisk the paste into the simmering liquid until it thickens.</li>
+                            <li>Stir in the Dijon mustard and season with salt and pepper to taste.</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <!-- Step 7 -->
+                <div class="relative">
+                    <div class="timeline-dot"></div>
+                    <div class="num-badge absolute left-0 transform -translate-x-1/2">7</div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 step-card ml-4">
+                        <h3 class="text-xl font-semibold mb-3">Slice and Serve</h3>
+                        <p class="text-gray-700 mb-4">Slice the beef against the grain into approximately 1/2-inch thick slices. Arrange on a serving platter and drizzle with the sauce if using. Garnish with fresh herbs if desired.</p>
+                        <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="Sliced roast beef" 
+                             class="w-full h-auto rounded-xl my-4">
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="text-green-800 font-medium">Serving suggestion: Pair with roasted potatoes, Yorkshire pudding, or seasonal vegetables for a complete meal.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Nutritional Information -->
+        <section class="mb-16 reveal">
+            <div class="bg-white rounded-3xl shadow-lg p-8">
+                <h2 class="text-3xl font-bold mb-6 text-center">Nutritional <span class="text-red-500">Information</span></h2>
+                <p class="text-center text-gray-700 mb-8">Per serving (approximately 6 oz/170g)</p>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Calories</span>
+                                <span class="font-semibold">350 kcal</span>
+                            </div>
+                            <div class="nutrition-bar">
+                                <div class="nutrition-progress" style="width: 65%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Protein</span>
+                                <span class="font-semibold">40g</span>
+                            </div>
+                            <div class="nutrition-bar">
+                                <div class="nutrition-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Carbohydrates</span>
+                                <span class="font-semibold">2g</span>
+                            </div>
+                            <div class="nutrition-bar">
+                                <div class="nutrition-progress" style="width: 10%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Fat</span>
+                                <span class="font-semibold">20g</span>
+                            </div>
+                            <div class="nutrition-bar">
+                                <div class="nutrition-progress" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Saturated Fat</span>
+                                <span class="font-semibold">8g</span>
+                            </div>
+                            <div class="nutrition-bar">
+                                <div class="nutrition-progress" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Sodium</span>
+                                <span class="font-semibold">420mg</span>
+                            </div>
+                            <div class="nutrition-bar">
+                                <div class="nutrition-progress" style="width: 30%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Iron</span>
+                                <span class="font-semibold">4.5mg</span>
+                            </div>
+                            <div class="nutrition-bar">
+                                <div class="nutrition-progress" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Potassium</span>
+                                <span class="font-semibold">650mg</span>
+                            </div>
+                            <div class="nutrition-bar">
+                                <div class="nutrition-progress" style="width: 55%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tips and Variations -->
+        <section class="mb-16 reveal">
+            <h2 class="text-3xl font-bold mb-8 text-center">Tips & <span class="text-red-500">Variations</span></h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl shadow-lg p-6 ingredient-card">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-lightbulb text-red-500 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Perfect Doneness</h3>
+                    <p class="text-gray-700">For the most accurate results, use a digital meat thermometer. Remember that meat continues to cook during the resting period, so remove it from the oven when it's 5°F below your target temperature.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-lg p-6 ingredient-card">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-pepper-hot text-red-500 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Flavor Variations</h3>
+                    <p class="text-gray-700">Try these alternative seasonings: black garlic and rosemary; coffee and cocoa rub; or Asian-inspired with ginger, soy, and five-spice powder. Each creates a completely different flavor profile.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-lg p-6 ingredient-card">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-wine-glass-alt text-red-500 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Wine Pairings</h3>
+                    <p class="text-gray-700">This roast beef pairs wonderfully with full-bodied red wines like Cabernet Sauvignon, Malbec, or Syrah. The rich flavors of the beef complement the tannins in these bold wines.</p>
+                </div>
+            </div>
+        </section>
+    
+        <!-- Reviews -->
+        <section class="mb-16 reveal">
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold mb-8 text-center">What People <span class="text-red-500">Are Saying</span></h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-50 rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <img src="whit.jpg" alt="Reviewer" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h4 class="font-semibold">Whitney Atieno</h4>
+                                <div class="flex text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700">"This is the BEST roast beef recipe I've ever tried! The meat was perfectly tender and the seasoning was spot on. My whole family loved it and asked for seconds!"</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <img src="davy.jpg" alt="Reviewer" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h4 class="font-semibold">David Abour Charles</h4>
+                                <div class="flex text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700">"Made this for Sunday dinner and it was a hit! The sauce really elevates the dish to restaurant quality. Will definitely make again for special occasions."</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-6 rounded-full transition-colors">
+                        <i class="fas fa-plus-circle mr-2"></i> Load More Reviews
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact and Share -->
+        <section class="reveal">
+            <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-3xl p-8 text-white">
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-4">Got Questions?</h2>
+                        <p class="mb-6">Feel free to reach out if you have any questions about this recipe or need cooking advice!</p>
+                        
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <a href="mailto:nzakagideon05@gmail.com" class="hover:underline">nzakagideon05@gmail.com</a>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <a href="https://instagram.com/thee_kidd2" target="_blank" class="hover:underline">thee_kidd2</a>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h2 class="text-3xl font-bold mb-4">Share this Recipe</h2>
+                        <p class="mb-6">If you enjoyed this recipe, share it with your friends and family!</p>
+                        
+                        <div class="flex flex-wrap gap-3">
+                            <a href="#" class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all">
+                                <i class="fab fa-pinterest-p"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-6">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="text-2xl font-bold">Nzaka's Kitchen</h2>
+                    <p class="text-gray-400">Delicious recipes for every occasion</p>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <a href="index.html" class="hover:text-red-500 transition-colors">Home</a>
+                    <a href="about.html" class="hover:text-red-500 transition-colors">About</a>
+                    <a href="menu.html" class="hover:text-red-500 transition-colors">Menu</a>
+                </div>
+            </div>
+            
+            <hr class="border-gray-800 mb-8">
+            
+            <div class="text-center text-gray-500 text-sm">
+                <p>&copy; 2023 Nzaka Gideon. All rights reserved.</p>
+                <p class="mt-2">A Microbiology Student at Jomo Kenyatta University.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Reveal animations on scroll
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        
+        window.addEventListener("scroll", reveal);
+        reveal(); // To check the content on page load
+        
+        // Checkbox functionality for ingredients
+        document.querySelectorAll('.ingredient-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const checkbox = this.querySelector('.check-icon i');
+                if (checkbox.classList.contains('fa-square')) {
+                    checkbox.classList.remove('fa-square');
+                    checkbox.classList.add('fa-check-square');
+                    this.style.textDecoration = 'line-through';
+                    this.style.opacity = '0.6';
+                } else {
+                    checkbox.classList.remove('fa-check-square');
+                    checkbox.classList.add('fa-square');
+                    this.style.textDecoration = 'none';
+                    this.style.opacity = '1';
+                }
+            });
+        });
+        
+        // Initialize GSAP animations
+        document.addEventListener('DOMContentLoaded', function() {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Animate header content
+            gsap.from('.header-content', {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                ease: 'power3.out'
+            });
+            
+            // Animate instruction steps
+            gsap.utils.toArray('.step-card').forEach((step, i) => {
+                gsap.from(step, {
+                    scrollTrigger: {
+                        trigger: step,
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    },
+                    duration: 0.8,
+                    opacity: 0,
+                    y: 30,
+                    delay: i * 0.1,
+                    ease: 'power3.out'
+                });
+            });
+            
+            // Animate nutrition bars
+            gsap.utils.toArray('.nutrition-progress').forEach((bar) => {
+                const width = bar.style.width;
+                bar.style.width = 0;
+                
+                gsap.to(bar, {
+                    scrollTrigger: {
+                        trigger: bar,
+                        start: 'top 85%',
+                        toggleActions: 'play none none none'
+                    },
+                    width: width,
+                    duration: 1.5,
+                    ease: 'power2.out'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

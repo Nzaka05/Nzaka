@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Gideon Nzaka</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --secondary: #ec4899;
+            --dark: #1f2937;
+            --light: #f9fafb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: rgba(255, 255, 255, 0.9) !important;
+            overflow-x: hidden;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .card {
+            background: rgba(15, 23, 42, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9) !important;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .glow-button {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .glow-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            z-index: -1;
+            transition: all 0.4s ease;
+        }
+        
+        .glow-button:hover::before {
+            transform: translateY(100%);
+        }
+        
+        .glow-button:hover {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.7);
+        }
+        
+        .skills-card {
+            perspective: 1000px;
+        }
+        
+        .skill-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .profile-img {
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+        
+        .bio-section {
+            position: relative;
+            z-index: 1;
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        .bio-section p {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        .bio-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.2), transparent 70%);
+            z-index: -1; 
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item p {
+            color: rgba(255, 255, 255, 0.9) !important;
+            opacity: 1 !important;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background: linear-gradient(to bottom, var(--primary), transparent);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .interest-tag {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            color: white !important;
+        }
+        
+        .interest-tag:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(236, 72, 153, 0.3));
+        }
+        
+        .custom-shape-divider {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            z-index: -1;
+        }
+        
+        .custom-shape-divider svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 70px;
+        }
+        
+        .custom-shape-divider-top {
+            top: 0;
+            transform: rotate(180deg);
+        }
+        
+        .custom-shape-divider-top .shape-fill {
+            fill: rgba(139, 92, 246, 0.2);
+        }
+        
+        .custom-shape-divider-bottom {
+            bottom: 0;
+        }
+        
+        .custom-shape-divider-bottom .shape-fill {
+            fill: rgba(236, 72, 153, 0.2);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        .blob-animation {
+            position: absolute;
+            top: 60%;
+            right: 10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.4), rgba(236, 72, 153, 0.2));
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            filter: blur(20px);
+            animation: blob-animation 8s infinite;
+            opacity: 0.5;
+            z-index: -1;
+        }
+        
+        @keyframes blob-animation {
+            0% {
+                border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            }
+            25% {
+                border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+            }
+            50% {
+                border-radius: 30% 70% 70% 30% / 70% 30% 30% 70%;
+            }
+            75% {
+                border-radius: 70% 30% 30% 70% / 30% 70% 70% 30%;
+            }
+            100% {
+                border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            }
+        }
+        
+        .nav-link {
+            position: relative;
+            padding: 5px 0;
+            margin: 0 15px;
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            margin: 0 10px;
+            color: var(--light);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .aspiration-item {
+            position: relative;
+            padding: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .aspiration-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+        
+        /* Ensure all text is visible */
+        .skills-card p,
+        .aspiration-item p,
+        .timeline-item p,
+        .interest-tag {
+            color: rgba(255, 255, 255, 0.9) !important;
+            opacity: 1 !important;
+        }
+        /* Education Section Visibility Fixes */
+        #education {
+            opacity: 1 !important;
+            visibility: visible !important;
+            display: block !important;
+        }
+
+        #education .card {
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        #education .timeline-item {
+            opacity: 1 !important;
+        }
+
+        /* Override any animation library styles */
+        #education[data-aos] {
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
+        }
+
+        /* Force all text to be visible */
+        #education,
+        #education * {
+            color: rgba(255, 255, 255, 0.9) !important;
+            opacity: 1 !important;
+        }
+
+        /* Ensure timeline elements are visible */
+        .timeline-item::before,
+        .timeline-item::after {
+            opacity: 1 !important;
+        }
+
+        /* Debug borders (temporary) */
+        #education {
+            position: relative;
+        }
+
+        #education::after {         
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(0,255,0,0.2);
+            color: white;
+            padding: 5px;
+            font-size: 12px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 backdrop-filter backdrop-blur-lg bg-opacity-10 bg-gray-900 shadow-lg py-4">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <div class="text-2xl font-bold">
+                <span class="gradient-text">Gideon</span> <span class="text-white">Nzaka</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="menu.html" class="nav-link">Menu</a>
+                <a href="recipes.html" class="nav-link">Recipes</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+            <button class="md:hidden text-white text-xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative py-20 md:py-32 overflow-hidden">
+        <div class="blob-animation"></div>
+        <div class="custom-shape-divider custom-shape-divider-top">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+        
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col-reverse md:flex-row items-center">
+                <div class="md:w-1/2 mt-10 md:mt-0" data-aos="fade-right" data-aos-duration="1000">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">About <span class="gradient-text">Me</span></h1>
+                    <p class="text-xl mb-8 text-gray-300">Microbiology Student | Aspiring Researcher | Food Enthusiast</p>
+                    <div class="flex space-x-4">
+                        <a href="#contact" class="glow-button bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 transform hover:scale-105">
+                            Get In Touch
+                        </a>
+                        <a href="#education" class="border border-white text-white font-bold py-3 px-6 rounded-full hover:bg-white hover:text-gray-900 transition duration-300 transform hover:scale-105">
+                            My Journey
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center floating" data-aos="fade-left" data-aos-duration="1000">
+                    <div class="w-64 h-64 md:w-80 md:h-80 bg-gradient-to-br from-purple-600 to-pink-500 rounded-full flex items-center justify-center overflow-hidden profile-img">
+                        <img src="./potrait.jpg" alt="Gideon Nzaka" class="w-full h-full object-cover">
+                    </div>
+                    <div class="photo-caption">
+                        "Science by Day, developer by Night"
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Bio Section -->
+    <section class="py-20 relative bio-section" id="bio">
+        <div class="bio-bg"></div>
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">My <span class="gradient-text">Story</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-pink-500 mx-auto"></div>
+            </div>
+            
+            <div class="card p-8 md:p-12 mb-20" data-aos="fade-up" data-aos-delay="200">
+                <p class="text-lg leading-relaxed mb-6">
+                    Hello! I'm <span class="gradient-text font-bold">Gideon Nzaka</span>, a passionate Microbiologist student at Jomo Kenyatta University of Agriculture and Technology. My journey in the fascinating world of microbiology has been driven by curiosity and a desire to understand the invisible forces that shape our health and environment.
+                </p>
+                <p class="text-lg leading-relaxed mb-6">
+                    Growing up with a deep appreciation for both science and culinary arts, I've found a unique intersection where my academic pursuits meet my passion for food. This portfolio showcases not only my academic journey but also my culinary creations that bring joy and nourishment.
+                </p>
+                <p class="text-lg leading-relaxed">
+                    When I'm not in the laboratory studying microorganisms, you'll find me experimenting with recipes, particularly my specialties: <span class="gradient-text font-bold">roasted beef and pilau</span>. I believe that understanding the science behind food preparation enhances the culinary experience, creating a beautiful blend of art and science.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education & Skills Section -->
+    <section class="py-20 relative" id="education" style="opacity: 1 !important; visibility: visible !important;">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Education & <span class="gradient-text">Skills</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-pink-500 mx-auto"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-10">
+                <!-- Education Timeline -->
+                <div class="card p-8" data-aos="fade-right" data-aos-delay="200" style="opacity: 1 !important;">
+                    <h3 class="text-2xl font-bold mb-6 gradient-text">Education Journey</h3>
+                    
+                    <div class="timeline-item">
+                        <h4 class="text-xl font-bold">Bachelor of Science in Medical Microbiology</h4>
+                        <p class="text-gray-400">Jomo Kenyatta University of Agriculture and Technology</p>
+                        <p class="text-gray-500">2020 - Present</p>
+                        <p class="mt-2">Focusing on the study of microorganisms in relation to human health and disease.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4 class="text-xl font-bold">High School Diploma</h4>
+                        <p class="text-gray-400">Excellence Secondary School</p>
+                        <p class="text-gray-500">2016 - 2020</p>
+                        <p class="mt-2">Graduated with honors, with a focus on Biology, Chemistry, and Mathematics.</p>
+                    </div>
+                </div>
+                
+                <!-- Skills -->
+                <div data-aos="fade-left" data-aos-delay="200" style="opacity: 1 !important;">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="card p-6 skills-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-microscope"></i>
+                            </div>
+                            <h4 class="text-xl font-bold mb-2">Laboratory Techniques</h4>
+                            <p>Proficient in microbial cultivation and molecular biology techniques.</p>
+                        </div>
+                        
+                        <div class="card p-6 skills-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-flask"></i>
+                            </div>
+                            <h4 class="text-xl font-bold mb-2">Research & Analysis</h4>
+                            <p>Experienced in experimental design and scientific analysis.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interests Section -->
+    <section class="py-20 relative" id="interests">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">My <span class="gradient-text">Interests</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-pink-500 mx-auto"></div>
+            </div>
+            
+            <div class="card p-8 md:p-12" data-aos="fade-up" data-aos-delay="200">
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 gradient-text">Academic Interests</h3>
+                        <div class="flex flex-wrap">
+                            <span class="interest-tag">Infectious Diseases</span>
+                            <span class="interest-tag">Antimicrobial Resistance</span>
+                            <span class="interest-tag">Food Microbiology</span>
+                            <span class="interest-tag">Public Health</span>
+                            <span class="interest-tag">Immunology</span>
+                            <span class="interest-tag">Bacterial Genetics</span>
+                            <span class="interest-tag">Biotechnology</span>
+                            <span class="interest-tag">Environmental Microbiology</span>
+                        </div>
+                        
+                        <h3 class="text-2xl font-bold mt-8 mb-6 gradient-text">Culinary Interests</h3>
+                        <div class="flex flex-wrap">
+                            <span class="interest-tag">East African Cuisine</span>
+                            <span class="interest-tag">Beef Preparation</span>
+                            <span class="interest-tag">Rice Dishes</span>
+                            <span class="interest-tag">Spice Blending</span>
+                            <span class="interest-tag">Food Preservation</span>
+                            <span class="interest-tag">Sustainable Cooking</span>
+                            <span class="interest-tag">Food Science</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 gradient-text">Personal Interests</h3>
+                        <div class="flex flex-wrap">
+                            <span class="interest-tag">Reading Scientific Journals</span>
+                            <span class="interest-tag">Nature Photography</span>
+                            <span class="interest-tag">Community Service</span>
+                            <span class="interest-tag">Hiking</span>
+                            <span class="interest-tag">Digital Content Creation</span>
+                            <span class="interest-tag">Science Communication</span>
+                            <span class="interest-tag">Cultural Exchange</span>
+                            <span class="interest-tag">Sustainable Living</span>
+                        </div>
+                        
+                        <div class="mt-8 p-6 rounded-lg bg-gray-800 bg-opacity-50">
+                            <p class="text-lg italic">
+                                "The beauty of microbiology is that it connects everything - from the food we eat to the environment we live in. My passion lies in exploring these connections and sharing them with others."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Aspirations Section -->
+    <section class="py-20 relative" id="aspirations">
+        <div class="blob-animation" style="top: 20%; left: 10%;"></div>
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Future <span class="gradient-text">Aspirations</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-pink-500 mx-auto"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="card aspiration-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-4xl mb-4 text-purple-500">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Research Excellence</h3>
+                    <p class="text-gray-300">Conduct groundbreaking research in medical microbiology, focusing on emerging infectious diseases and antimicrobial resistance to contribute to global health solutions.</p>
+                </div>
+                
+                <div class="card aspiration-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-4xl mb-4 text-purple-500">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Advanced Education</h3>
+                    <p class="text-gray-300">Pursue postgraduate studies in specialized fields of microbiology, possibly focusing on the intersection of food science and microbiology for innovative applications.</p>
+                </div>
+                
+                <div class="card aspiration-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-4xl mb-4 text-purple-500">
+                        <i class="fas fa-globe-africa"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Community Impact</h3>
+                    <p class="text-gray-300">Develop community-based projects that apply microbiological principles to improve public health, food safety, and environmental sustainability in local communities.</p>
+                </div>
+                
+                <div class="card aspiration-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-4xl mb-4 text-purple-500">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Culinary Innovation</h3>
+                    <p class="text-gray-300">Explore the scientific principles behind traditional cooking methods and develop innovative approaches to food preparation that preserve cultural heritage while enhancing nutritional value.</p>
+                </div>
+                
+                <div class="card aspiration-item" data-aos="fade-up" data-aos-delay="500">
+                    <div class="text-4xl mb-4 text-purple-500">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Science Communication</h3>
+                    <p class="text-gray-300">Become an effective communicator of scientific concepts, making microbiology accessible and engaging for diverse audiences through digital content and community workshops.</p>
+                </div>
+                
+                <div class="card aspiration-item" data-aos="fade-up" data-aos-delay="600">
+                    <div class="text-4xl mb-4 text-purple-500">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Collaborative Projects</h3>
+                    <p class="text-gray-300">Build interdisciplinary collaborations between science, cuisine, and public health to develop holistic approaches to community wellbeing and sustainable development.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-20 relative" id="contact">
+        <div class="custom-shape-divider custom-shape-divider-bottom">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+        
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Get In <span class="gradient-text">Touch</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-pink-500 mx-auto"></div>
+            </div>
+            
+            <div class="card p-8 md:p-12" data-aos="fade-up" data-aos-delay="200">
+                <div class="grid md:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 gradient-text">Connect With Me</h3>
+                        <p class="mb-6">I'm always interested in discussing research opportunities, culinary collaborations, or just having a conversation about microbiology and food science.</p>
+                        
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center mr-4">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-400">Email</p>
+                                <p>nzakagideon05@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center mr-4">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-400">Location</p>
+                                <p>Jomo Kenyatta University, Nairobi, Kenya</p>
+                            </div>
+                        </div>
+                        
+                        <h4 class="text-xl font-bold mt-8 mb-4">Social Media</h4>
+                        <div class="flex">
+                            <a href="https://instagram.com/thee_kidd2" target="_blank" class="social-icon">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://x.com/home" class="social-icon">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/feed/" class="social-icon">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://github.com/Nzaka05" class="social-icon">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 bg-gray-800 bg-opacity-50 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-6 gradient-text">Send Me a Message</h3>
+                        <form>
+                            <div class="mb-4">
+                                <label for="name" class="block text-sm font-medium text-gray-400 mb-2">Name</label>
+                                <input type="text" id="name" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="email" class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                                <input type="email" id="email" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="message" class="block text-sm font-medium text-gray-400 mb-2">Message</label>
+                                <textarea id="message" rows="4" class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="glow-button bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold py-3 px-6 rounded-lg transition duration-300 w-full">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 text-center text-gray-400">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <p class="text-2xl font-bold">
+                        <span class="gradient-text">Gideon</span> <span class="text-white">Nzaka</span>
+                    </p>
+                    <p class="mt-2">A Microbiology Student & Culinary Enthusiast. A developer by heart</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="index.html" class="hover:text-purple-500 transition duration-300">Home</a>
+                    <a href="about.html" class="hover:text-purple-500 transition duration-300">About</a>
+                    <a href="menu.html" class="hover:text-purple-500 transition duration-300">Menu</a>
+                    <a href="#" class="hover:text-purple-500 transition duration-300">Contact</a>
+                </div>
+            </div>
+            
+            <div class="mt-10 pt-6 border-t border-gray-800">
+                <p>&copy; 2023 Gideon Nzaka. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS animation library
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            initClassName: 'aos-init',
+            animatedClassName: 'aos-animate'
+        });
+        
+        // Scroll reveal animation for text elements
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-reveal');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        
+        document.querySelectorAll('h1, h2, h3, p:not(.no-animate)').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.animate-reveal').forEach((el, i) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, i * 100);
+            });
+        });
+    </script>
+</body>
+</html>

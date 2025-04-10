@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nzaka's Pilau Recipe</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF5E5B;
+            --secondary: #D65F5F;
+            --accent: #FFD166;
+            --dark: #2A2D34;
+            --light: #F9F9F9;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FAF3E0;
+            color: var(--dark);
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .recipe-card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .recipe-image {
+            height: 400px;
+            object-fit: cover;
+            border-top-left-radius: 1.5rem;
+            border-top-right-radius: 1.5rem;
+        }
+        
+        .ingredient-item {
+            transition: all 0.2s ease;
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .ingredient-item:hover {
+            transform: translateX(10px);
+            color: var(--secondary);
+        }
+        
+        .ingredient-item::before {
+            content: '•';
+            color: var(--accent);
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0.5rem;
+            top: -0.2rem;
+        }
+        
+        .step-card {
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+        
+        .step-card:hover {
+            border-left-width: 8px;
+            background-color: rgba(255, 209, 102, 0.1);
+        }
+        
+        .step-number {
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        
+        .sauce-splash {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(214, 95, 95, 0.1);
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .spice-tag {
+            background: var(--accent);
+            color: var(--dark);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .spice-tag:hover {
+            transform: translateY(-3px) rotate(2deg);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .text-gradient {
+            background-image: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .section-line {
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 2px;
+            width: 80px;
+            margin: 8px 0 24px;
+        }
+        
+        .accent-circle {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(120deg, rgba(255, 94, 91, 0.1), rgba(255, 209, 102, 0.1));
+            z-index: -1;
+        }
+        
+        /* Interactive checkboxes for ingredients */
+        .ingredient-checkbox {
+            display: none;
+        }
+        
+        .custom-checkbox {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 4px;
+            margin-right: 10px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .ingredient-checkbox:checked + .custom-checkbox::after {
+            content: '✓';
+            position: absolute;
+            color: var(--primary);
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .ingredient-checkbox:checked ~ span {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .float-animation {
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 3s infinite;
+        }
+        
+        /* Video Controls Styling */
+        video::-webkit-media-controls {
+            background-color: rgba(255, 94, 91, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        /* Tooltip styling */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--accent);
+            cursor: help;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 backdrop-filter backdrop-blur-lg bg-opacity-10 bg-gray-900 shadow-lg py-4">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <div class="text-2xl font-bold">
+                <span class="gradient-text">Gideon</span> <span class="text-white">Nzaka</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="menu.html" class="nav-link">Menu</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+            <button class="md:hidden text-white text-xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="pt-24 pb-16 px-4 md:px-0">
+        <div class="container mx-auto">
+            <div class="recipe-card max-w-5xl mx-auto overflow-hidden">
+                <img src="./pilau.jpg" 
+                     alt="Delicious Pilau" class="recipe-image w-full">
+                
+                <div class="p-6 md:p-10 relative">
+                    <!-- Accent circles in background -->
+                    <div class="accent-circle top-20 right-0 opacity-30"></div>
+                    <div class="accent-circle bottom-10 left-0 opacity-20"></div>
+                    
+                    <div data-aos="fade-up">
+                        <span class="text-sm text-gray-500 uppercase tracking-wider">Nzaka's Signature</span>
+                        <h1 class="text-4xl md:text-5xl font-bold mt-2 mb-4">Aromatic Spiced Pilau</h1>
+                        <div class="section-line"></div>
+                        
+                        <div class="flex flex-wrap items-center text-gray-600 mb-6">
+                            <div class="flex items-center mr-6 mb-2">
+                                <i class="far fa-clock mr-2 text-primary"></i>
+                                <span>Prep: 20 mins</span>
+                            </div>
+                            <div class="flex items-center mr-6 mb-2">
+                                <i class="fas fa-fire mr-2 text-primary"></i>
+                                <span>Cook: 45 mins</span>
+                            </div>
+                            <div class="flex items-center mr-6 mb-2">
+                                <i class="fas fa-users mr-2 text-primary"></i>
+                                <span>Serves: 6</span>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-fire-alt mr-2 text-primary"></i>
+                                <span>Difficulty: Medium</span>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-700 text-lg leading-relaxed mb-8">
+                            A staple East African dish, this aromatic pilau is infused with a blend of spices that will transport 
+                            your taste buds to the streets of Mombasa. Perfect for family gatherings or festive occasions, 
+                            this dish combines fragrant basmati rice with tender meat and a symphony of spices.
+                        </p>
+                        
+                        <div class="flex flex-wrap mb-6">
+                            <span class="spice-tag hover-scale"><i class="fas fa-pepper-hot mr-1"></i> Aromatic</span>
+                            <span class="spice-tag hover-scale"><i class="fas fa-utensils mr-1"></i> East African</span>
+                            <span class="spice-tag hover-scale"><i class="fas fa-star mr-1"></i> Festive</span>
+                            <span class="spice-tag hover-scale"><i class="fas fa-heart mr-1"></i> Family Favorite</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pb-20 px-4 md:px-0">
+        <div class="container mx-auto max-w-5xl">
+            <!-- Ingredients Section -->
+            <section class="mb-16" data-aos="fade-up" data-aos-delay="100">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-10 relative overflow-hidden">
+                    <div class="sauce-splash top-10 right-10"></div>
+                    <div class="sauce-splash bottom-20 left-5"></div>
+                    
+                    <h2 class="text-3xl font-bold mb-2 flex items-center">
+                        <i class="fas fa-mortar-pestle text-primary mr-3 float-animation"></i>
+                        Ingredients
+                    </h2>
+                    <div class="section-line"></div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-gradient">For the Rice:</h3>
+                            <ul class="space-y-3">
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="ing1" class="ingredient-checkbox">
+                                    <label for="ing1" class="custom-checkbox"></label>
+                                    <span>3 cups basmati rice, washed and soaked for 30 minutes</span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="ing2" class="ingredient-checkbox">
+                                    <label for="ing2" class="custom-checkbox"></label>
+                                    <span>1 kg beef or goat meat, cut into cubes</span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="ing3" class="ingredient-checkbox">
+                                    <label for="ing3" class="custom-checkbox"></label>
+                                    <span>4 cups beef or chicken stock</span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="ing4" class="ingredient-checkbox">
+                                    <label for="ing4" class="custom-checkbox"></label>
+                                    <span>2 large onions, finely sliced</span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="ing5" class="ingredient-checkbox">
+                                    <label for="ing5" class="custom-checkbox"></label>
+                                    <span>4 tablespoons vegetable oil or ghee</span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="ing6" class="ingredient-checkbox">
+                                    <label for="ing6" class="custom-checkbox"></label>
+                                    <span>4 cloves garlic, minced</span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="ing7" class="ingredient-checkbox">
+                                    <label for="ing7" class="custom-checkbox"></label>
+                                    <span>1 inch ginger, grated</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-gradient">For the Spice Mix:</h3>
+                            <ul class="space-y-3">
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="spice1" class="ingredient-checkbox">
+                                    <label for="spice1" class="custom-checkbox"></label>
+                                    <span>2 cinnamon sticks</span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="spice2" class="ingredient-checkbox">
+                                    <label for="spice2" class="custom-checkbox"></label>
+                                    <span>6 cardamom pods, crushed</span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="spice3" class="ingredient-checkbox">
+                                    <label for="spice3" class="custom-checkbox"></label>
+                                    <span>6 cloves</span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="spice4" class="ingredient-checkbox">
+                                    <label for="spice4" class="custom-checkbox"></label>
+                                    <span>1 teaspoon cumin seeds</span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="spice5" class="ingredient-checkbox">
+                                    <label for="spice5" class="custom-checkbox"></label>
+                                    <span>2 tablespoons pilau masala <span class="tooltip">(pilau mix)
+                                        <span class="tooltip-text">A blend of spices including cumin, coriander, black pepper, cardamom, and cinnamon. You can buy pre-made or make your own.</span>
+                                    </span></span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="spice6" class="ingredient-checkbox">
+                                    <label for="spice6" class="custom-checkbox"></label>
+                                    <span>1 teaspoon black pepper</span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="spice7" class="ingredient-checkbox">
+                                    <label for="spice7" class="custom-checkbox"></label>
+                                    <span>Salt to taste</span>
+                                </li>
+                                <li class="ingredient-item flex items-center">
+                                    <input type="checkbox" id="spice8" class="ingredient-checkbox">
+                                    <label for="spice8" class="custom-checkbox"></label>
+                                    <span>2-3 bay leaves</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Instructions Section -->
+            <section class="mb-16" data-aos="fade-up" data-aos-delay="200">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-10">
+                    <h2 class="text-3xl font-bold mb-2 flex items-center">
+                        <i class="fas fa-list-ol text-primary mr-3 pulse-animation"></i>
+                        Instructions
+                    </h2>
+                    <div class="section-line"></div>
+                    
+                    <div class="space-y-8">
+                        <div class="step-card p-4 md:p-6 rounded-r-lg" data-aos="fade-left" data-aos-delay="100">
+                            <div class="flex items-start">
+                                <div class="step-number mr-4 flex-shrink-0">1</div>
+                                <div>
+                                    <h3 class="text-xl font-medium mb-3">Prepare the Meat</h3>
+                                    <p class="text-gray-700 leading-relaxed">
+                                        In a large pot, heat 2 tablespoons of oil or ghee over medium-high heat. 
+                                        Add the meat cubes and brown on all sides, about 5-7 minutes. Season with 
+                                        a pinch of salt and set aside.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card p-4 md:p-6 rounded-r-lg" data-aos="fade-left" data-aos-delay="200">
+                            <div class="flex items-start">
+                                <div class="step-number mr-4 flex-shrink-0">2</div>
+                                <div>
+                                    <h3 class="text-xl font-medium mb-3">Sauté the Aromatics</h3>
+                                    <p class="text-gray-700 leading-relaxed">
+                                        In the same pot, add the remaining oil or ghee. Add the cumin seeds and let them sizzle for 
+                                        about 30 seconds. Add the sliced onions and sauté until they turn golden brown, 
+                                        about 8-10 minutes. Add the minced garlic and grated ginger, and cook for 
+                                        another minute until fragrant.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card p-4 md:p-6 rounded-r-lg" data-aos="fade-left" data-aos-delay="300">
+                            <div class="flex items-start">
+                                <div class="step-number mr-4 flex-shrink-0">3</div>
+                                <div>
+                                    <h3 class="text-xl font-medium mb-3">Add the Spices</h3>
+                                    <p class="text-gray-700 leading-relaxed">
+                                        Add the cinnamon sticks, cardamom pods, cloves, bay leaves, and pilau masala to the pot. 
+                                        Stir for about 30 seconds until the spices become fragrant. Be careful not to burn the spices.
+                                    </p>
+                                    <div class="bg-gray-50 p-4 rounded-lg mt-3 border-l-4 border-yellow-400">
+                                        <p class="text-sm text-gray-600"><i class="fas fa-lightbulb text-yellow-500 mr-2"></i> <strong>Pro Tip:</strong> 
+                                            Toasting the spices briefly enhances their flavor and aroma. If you prefer a stronger flavor, 
+                                            you can dry roast the whole spices separately before adding them to the oil.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card p-4 md:p-6 rounded-r-lg" data-aos="fade-left" data-aos-delay="400">
+                            <div class="flex items-start">
+                                <div class="step-number mr-4 flex-shrink-0">4</div>
+                                <div>
+                                    <h3 class="text-xl font-medium mb-3">Return the Meat</h3>
+                                    <p class="text-gray-700 leading-relaxed">
+                                        Return the browned meat to the pot and mix well with the spices and onions. 
+                                        Cook for about 5 minutes, stirring occasionally to ensure the meat is well coated with the spices.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card p-4 md:p-6 rounded-r-lg" data-aos="fade-left" data-aos-delay="500">
+                            <div class="flex items-start">
+                                <div class="step-number mr-4 flex-shrink-0">5</div>
+                                <div>
+                                    <h3 class="text-xl font-medium mb-3">Add Stock and Simmer</h3>
+                                    <p class="text-gray-700 leading-relaxed">
+                                        Pour in the beef or chicken stock and bring to a boil. Reduce heat to medium-low, 
+                                        cover the pot, and let the meat simmer for about 20-25 minutes, or until it's tender 
+                                        and the stock has absorbed some of the flavors from the spices.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card p-4 md:p-6 rounded-r-lg" data-aos="fade-left" data-aos-delay="600">
+                            <div class="flex items-start">
+                                <div class="step-number mr-4 flex-shrink-0">6</div>
+                                <div>
+                                    <h3 class="text-xl font-medium mb-3">Add Rice</h3>
+                                    <p class="text-gray-700 leading-relaxed">
+                                        Drain the soaked rice and add it to the pot. Gently stir to mix everything well, 
+                                        ensuring each grain of rice is coated with the spiced broth. Add salt to taste and 
+                                        black pepper. If needed, add a little more water to ensure the rice is fully submerged 
+                                        (about 1 inch of liquid above the rice).
+                                    </p>
+                                    <div class="bg-gray-50 p-4 rounded-lg mt-3 border-l-4 border-yellow-400">
+                                        <p class="text-sm text-gray-600"><i class="fas fa-lightbulb text-yellow-500 mr-2"></i> <strong>Key Step:</strong> 
+                                            The ratio should be approximately 1:2 (1 cup of rice to 2 cups of liquid). 
+                                            However, adjust according to the type of rice you're using.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card p-4 md:p-6 rounded-r-lg" data-aos="fade-left" data-aos-delay="700">
+                            <div class="flex items-start">
+                                <div class="step-number mr-4 flex-shrink-0">7</div>
+                                <div>
+                                    <h3 class="text-xl font-medium mb-3">Cook the Rice</h3>
+                                    <p class="text-gray-700 leading-relaxed">
+                                        Bring the mixture to a boil, then reduce heat to low. Cover tightly with aluminum foil 
+                                        and then place the lid on top to ensure no steam escapes. Let it cook undisturbed for 20-25 minutes, 
+                                        or until the rice is tender and has absorbed all the liquid.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card p-4 md:p-6 rounded-r-lg" data-aos="fade-left" data-aos-delay="800">
+                            <div class="flex items-start">
+                                <div class="step-number mr-4 flex-shrink-0">8</div>
+                                <div>
+                                    <h3 class="text-xl font-medium mb-3">Fluff and Serve</h3>
+                                    <p class="text-gray-700 leading-relaxed">
+                                        Once the rice is cooked, turn off the heat and let it rest for 5-10 minutes. 
+                                        Then, remove the lid and the foil, and gently fluff the rice with a fork, mixing the 
+                                        meat and rice together. Remove the whole spices (cinnamon sticks, cardamom pods, cloves, and bay leaves) 
+                                        if desired before serving.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Serving Suggestions -->
+            <section class="mb-16" data-aos="fade-up" data-aos-delay="300">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-10">
+                    <h2 class="text-3xl font-bold mb-2 flex items-center">
+                        <i class="fas fa-utensils text-primary mr-3"></i>
+                        Serving Suggestions
+                    </h2>
+                    <div class="section-line"></div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 rounded-xl p-5 hover-scale">
+                            <h3 class="text-xl font-semibold mb-3 text-primary">Traditional Sides</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                    <span>Fresh <span class="tooltip">kachumbari
+                                        <span class="tooltip-text">A fresh East African salad made with tomatoes, onions, cilantro, and sometimes chili peppers.</span>
+                                    </span> (tomato and onion salad)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                    <span>Cucumber yogurt raita</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                    <span>Chili sauce or pickle</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                    <span>Fried plantains</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-5 hover-scale">
+                            <h3 class="text-xl font-semibold mb-3 text-primary">Drink Pairings</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                    <span>Mango lassi</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                    <span>Spiced <span class="tooltip">chai tea
+                                        <span class="tooltip-text">A fragrant tea made with milk, water, and spices like cardamom, cinnamon, and ginger.</span>
+                                    </span></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                    <span>Fresh tamarind juice</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                    <span>Coconut water</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Chef's Notes -->
+            <section data-aos="fade-up" data-aos-delay="400">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-10">
+                    <h2 class="text-3xl font-bold mb-2 flex items-center">
+                        <i class="fas fa-book-open text-primary mr-3"></i>
+                        Chef's Notes
+                    </h2>
+                    <div class="section-line"></div>
+                    
+                    <div class="prose max-w-none text-gray-700">
+                        <p class="mb-4">
+                            Pilau is a dish that tells the story of East Africa's rich culture and history. The spices 
+                            used in this recipe were brought to East Africa through trade routes with the Middle East and India, 
+                            creating this unique fusion dish that has become a staple in Kenyan cuisine.
+                        </p>
+                        <p class="mb-4">
+                            While traditional pilau uses beef or goat meat, you can easily substitute with chicken, lamb, 
+                            or make a vegetarian version with vegetables like carrots, peas, and potatoes. The key to a 
+                            perfect pilau is allowing the rice to absorb all the flavors from the spices and meat stock.
+                        </p>
+                        <p class="mb-4">
+                            In my home region, we often make this dish for special occasions and family gatherings. 
+                            The aroma that fills the house while cooking pilau brings everyone to the kitchen with anticipation!
+                        </p>
+                        
+                        <div class="bg-primary bg-opacity-10 rounded-lg p-6 mt-6">
+                            <h3 class="text-xl font-semibold mb-2 text-primary">Personal Touch</h3>
+                            <p class="italic">
+                                "As a student at Jomo Kenyatta University, I've adapted this recipe to be budget-friendly 
+                                without compromising on flavor. The combination of aromatic spices transforms simple 
+                                ingredients into a magnificent feast that reminds me of home."
+                            </p>
+                            <p class="text-right font-semibold mt-2">- Gideon Nzaka</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-10 px-4 md:px-0">
+        <div class="container mx-auto max-w-5xl">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Nzaka's Kitchen</h3>
+                    <p class="text-gray-400">
+                        Sharing my passion for East African cuisine with a modern twist. 
+                        Join me on a culinary journey through flavors and culture.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Connect</h3>
+                    <a href="https://www.instagram.com/thee_kidd2/" class="flex items-center text-gray-400 hover:text-white transition-colors mb-2">
+                        <i class="fab fa-instagram mr-2"></i> thee_kidd2
+                    </a>
+                    <a href="mailto:nzakagideon05@gmail.com" class="flex items-center text-gray-400 hover:text-white transition-colors">
+                        <i class="far fa-envelope mr-2"></i> nzakagideon05@gmail.com
+                    </a>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">About Me</h3>
+                    <p class="text-gray-400">
+                      A Microbiology student at Jomo Kenyatta University, 
+                        passionate about both science and culinary arts.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
+                <p>&copy; 2023 Nzaka Gideon. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        // Initialize AOS animation library
+        AOS.init({
+            duration: 800,
+            once: false,
+            mirror: true
+        });
+        
+        // Intersection Observer for scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            // Observe all step cards
+            document.querySelectorAll('.step-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
