@@ -778,6 +778,13 @@
     </footer>
 
     <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
         // Reveal animations on scroll
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
